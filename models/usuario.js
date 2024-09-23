@@ -2,10 +2,20 @@ const mongoose = require('mongoose');
 
 // Definir el esquema de usuario
 const UsuarioSchema = new mongoose.Schema({
-  nombre: String,
-  imagen: String,
-  password: String
+  nombre: {
+    type: String,
+    required: true
+  },
+  imagen: {
+    type: String,
+    required: true
+  },
+  password: {
+    type: String,
+    required: true
+  }
 });
 
-// Exportar el modelo Usuario
-module.exports = mongoose.model('Usuario', UsuarioSchema);
+const Usuario = mongoose.model('Usuario', UsuarioSchema);
+
+module.exports = Usuario;

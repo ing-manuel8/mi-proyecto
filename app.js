@@ -8,7 +8,7 @@ const Usuario = require('./models/usuario'); // Importar el modelo de usuario
 const app = express();
 
 // Conectar a MongoDB
-const mongoURI = 'mongodb+srv://usuariosbase:dpu5qjgHImGUvwHV@usuario.7dqxf.mongodb.net/usuarios?retryWrites=true&w=majority';
+const mongoURI = process.env.MONGO_URI;
 mongoose.connect(mongoURI)
   .then(() => console.log('Conectado a MongoDB'))
   .catch(err => console.error('Error al conectar a MongoDB:', err));
