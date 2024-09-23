@@ -13,6 +13,12 @@ const UsuarioSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true
+  },
+  // Agregar referencia al administrador
+  admin: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Admin', // Hace referencia al modelo Admin
+    required: true
   }
 });
 

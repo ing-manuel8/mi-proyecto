@@ -4,7 +4,9 @@ const sharp = require('sharp');
 const path = require('path');
 require('dotenv').config();
 const mongoose = require('mongoose');
+const session = require('express-session');
 const Usuario = require('./models/usuario'); // Importar el modelo de usuario
+const Admin = require('./models/admin'); // Importar el modelo de admin
 
 const app = express();
 
@@ -24,15 +26,64 @@ app.use(express.urlencoded({ extended: true }));
 // Middleware para servir archivos estáticos (CSS, imágenes, etc.)
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Configuración del middleware de sesión
+app.use(session({
+  secret: 'mi-secreto-super-seguro', // Cambia esto por una clave secreta fuerte
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false } // Cambia a true si usas HTTPS
+}));
+
 // Configurar Multer para almacenar imágenes temporalmente en memoria
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// Ruta para mostrar la lista de usuarios
-app.get('/usuarios', async (req, res) => {
+// Middleware para verificar si el usuario está autenticado
+function isAuthenticated(req, res, next) {
+  if (req.session.isAuthenticated) {
+    return next(); // Continuar si está autenticado
+  } else {
+    res.redirect('/login'); // Redirigir al login si no está autenticado
+  }
+}
+
+// Ruta para mostrar el formulario de inicio de sesión
+app.get('/login', (req, res) => {
+  res.render('login'); // Renderiza la vista de login
+});
+
+// Ruta para manejar el inicio de sesión
+app.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+
   try {
-    // Obtener la lista de usuarios desde MongoDB
-    const usuarios = await Usuario.find();
+    // Buscar al administrador en la base de datos
+    const admin = await Admin.findOne({ username });
+
+    if (admin && admin.password === password) {
+      req.session.isAuthenticated = true;
+      req.session.adminId = admin._id; // Almacenar el ID del administrador en la sesión
+      res.redirect('/usuarios'); // Redirigir a la página de usuarios
+    } else {
+      res.status(401).send('Credenciales incorrectas');
+    }
+  } catch (error) {
+    console.error('Error al iniciar sesión:', error);
+    res.status(500).send('Error al iniciar sesión');
+  }
+});
+
+// Ruta para cerrar sesión
+app.get('/logout', (req, res) => {
+  req.session.destroy(); // Destruir la sesión
+  res.redirect('/login'); // Redirigir al login
+});
+
+// Ruta para mostrar la lista de usuarios, solo si está autenticado
+app.get('/usuarios', isAuthenticated, async (req, res) => {
+  try {
+    // Obtener los usuarios asociados al administrador autenticado
+    const usuarios = await Usuario.find({ admin: req.session.adminId }); // Filtrar por administrador
     res.render('usuarios', { usuarios });
   } catch (error) {
     console.error('Error al obtener usuarios:', error);
@@ -41,12 +92,12 @@ app.get('/usuarios', async (req, res) => {
 });
 
 // Ruta para mostrar el formulario de nuevo usuario
-app.get('/usuarios/nuevo', (req, res) => {
+app.get('/usuarios/nuevo', isAuthenticated, (req, res) => {
   res.render('nuevo_usuario'); // Renderiza el formulario de nuevo usuario
 });
 
-// Ruta para manejar la subida y optimización de la imagen
-app.post('/usuarios', upload.single('imagen'), async (req, res) => {
+// Ruta para manejar la subida y optimización de la imagen, y crear un nuevo usuario
+app.post('/usuarios', isAuthenticated, upload.single('imagen'), async (req, res) => {
   const { nombre, password } = req.body;
   let imagenPath = '/uploads/default.png'; // Imagen por defecto
 
@@ -69,9 +120,14 @@ app.post('/usuarios', upload.single('imagen'), async (req, res) => {
     }
   }
 
-  // Insertar el nuevo usuario en la base de datos MongoDB
+  // Insertar el nuevo usuario en la base de datos MongoDB, asociado al administrador autenticado
   try {
-    await Usuario.create({ nombre, imagen: imagenPath, password });
+    await Usuario.create({
+      nombre,
+      imagen: imagenPath,
+      password,
+      admin: req.session.adminId // Asociar al administrador autenticado
+    });
     res.redirect('/usuarios');
   } catch (error) {
     console.error('Error al crear usuario:', error);
@@ -80,9 +136,9 @@ app.post('/usuarios', upload.single('imagen'), async (req, res) => {
 });
 
 // Ruta para editar un usuario (muestra el formulario de edición)
-app.get('/usuarios/editar/:id', async (req, res) => {
+app.get('/usuarios/editar/:id', isAuthenticated, async (req, res) => {
   try {
-    const usuario = await Usuario.findById(req.params.id);
+    const usuario = await Usuario.findOne({ _id: req.params.id, admin: req.session.adminId }); // Verificar que el usuario pertenezca al administrador
 
     if (usuario) {
       res.render('editar_usuario', { usuario });
@@ -96,7 +152,7 @@ app.get('/usuarios/editar/:id', async (req, res) => {
 });
 
 // Ruta para manejar la edición del usuario
-app.post('/usuarios/editar/:id', upload.single('imagen'), async (req, res) => {
+app.post('/usuarios/editar/:id', isAuthenticated, upload.single('imagen'), async (req, res) => {
   const { nombre, password } = req.body;
   let imagenPath;
 
@@ -129,7 +185,7 @@ app.post('/usuarios/editar/:id', upload.single('imagen'), async (req, res) => {
       updateData.imagen = imagenPath;
     }
 
-    await Usuario.findByIdAndUpdate(req.params.id, updateData);
+    await Usuario.findOneAndUpdate({ _id: req.params.id, admin: req.session.adminId }, updateData); // Asegurar que el administrador solo edite sus usuarios
     res.redirect('/usuarios');
   } catch (error) {
     console.error('Error al actualizar usuario:', error);
@@ -138,9 +194,10 @@ app.post('/usuarios/editar/:id', upload.single('imagen'), async (req, res) => {
 });
 
 // Ruta para eliminar un usuario
-app.post('/usuarios/eliminar/:id', async (req, res) => {
+app.post('/usuarios/eliminar/:id', isAuthenticated, async (req, res) => {
   try {
-    await Usuario.findByIdAndDelete(req.params.id);
+    // Solo eliminar si el usuario pertenece al administrador autenticado
+    await Usuario.findOneAndDelete({ _id: req.params.id, admin: req.session.adminId });
     res.redirect('/usuarios');
   } catch (error) {
     console.error('Error al eliminar usuario:', error);
