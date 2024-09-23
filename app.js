@@ -27,10 +27,13 @@ app.set('views', path.join(__dirname, 'views'));
 // Middleware para manejar formularios y datos en URL
 app.use(express.urlencoded({ extended: true }));
 
-// Middleware para servir archivos estáticos (CSS, imágenes, etc.)
+// Middleware para servir archivos estáticos (como CSS, imágenes, etc.)
 app.use(express.static(path.join(__dirname, 'public')));
 
-
+// Ruta para mostrar el formulario de registro de administrador
+app.get('/register', (req, res) => {
+  res.render('register'); // Renderiza la vista 'register.ejs'
+});
 // Configuración del middleware de sesión con MongoDB
 app.use(session({
   secret: process.env.SESSION_SECRET || 'mi-secreto-super-seguro', // Usar una clave secreta fuerte o variable de entorno
