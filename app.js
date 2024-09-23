@@ -30,7 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Configuración del middleware de sesión con MongoDB
 app.use(session({
-  secret: 'mi-secreto-super-seguro', // Cambia esto por una clave secreta fuerte
+  secret: process.env.SESSION_SECRET, // Obtener la clave secreta desde la variable de entorno
   resave: false,
   saveUninitialized: false,
   store: MongoStore.create({
