@@ -11,6 +11,7 @@ const MongoStore = require('connect-mongo');
 
 
 
+
 const app = express();
 
 // Conectar a MongoDB
@@ -68,18 +69,25 @@ app.post('/login', async (req, res) => {
     // Buscar al administrador en la base de datos
     const admin = await Admin.findOne({ username });
 
-    if (admin && admin.password === password) {
-      req.session.isAuthenticated = true;
-      req.session.adminId = admin._id; // Almacenar el ID del administrador en la sesión
-      res.redirect('/usuarios'); // Redirigir a la página de usuarios
+    // Verificar si el usuario existe y la contraseña es correcta
+    if (admin) {
+      const match = await bcrypt.compare(password, admin.password); // Comparar la contraseña ingresada con el hash
+      if (match) {
+        req.session.isAuthenticated = true; // Marcar como autenticado
+        req.session.adminId = admin._id; // Almacenar el ID del administrador en la sesión
+        res.redirect('/usuarios'); // Redirigir a la lista de usuarios
+      } else {
+        res.status(401).send('Credenciales incorrectas'); // Contraseña incorrecta
+      }
     } else {
-      res.status(401).send('Credenciales incorrectas');
+      res.status(401).send('Credenciales incorrectas'); // Usuario no encontrado
     }
   } catch (error) {
     console.error('Error al iniciar sesión:', error);
     res.status(500).send('Error al iniciar sesión');
   }
 });
+
 
 // Ruta para cerrar sesión
 app.get('/logout', (req, res) => {
@@ -212,6 +220,38 @@ app.post('/usuarios/eliminar/:id', isAuthenticated, async (req, res) => {
     res.status(500).send('Error al eliminar usuario');
   }
 });
+
+
+
+const bcrypt = require('bcrypt'); // Importar bcrypt
+const saltRounds = 10; // Número de rondas de "salt" para bcrypt
+
+// Ruta para manejar el registro de nuevos administradores
+app.post('/register', async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    // Verificar si el nombre de usuario ya existe
+    const existingAdmin = await Admin.findOne({ username });
+    if (existingAdmin) {
+      return res.status(400).send('El nombre de usuario ya está registrado');
+    }
+
+    // Cifrar la contraseña antes de guardarla en la base de datos
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    // Crear un nuevo administrador con la contraseña cifrada
+    const newAdmin = new Admin({ username, password: hashedPassword });
+    await newAdmin.save();
+
+    res.redirect('/login'); // Redirigir al login después de registrarse
+  } catch (error) {
+    console.error('Error al registrar el administrador:', error);
+    res.status(500).send('Error al registrar el administrador');
+  }
+});
+
+
 
 // Redirigir la raíz (/) a la página de inicio de sesión
 app.get('/', (req, res) => {
