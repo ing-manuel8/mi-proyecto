@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Usuarios</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<!-- Contenedor principal de usuarios -->
+<div class="container">
+    <!-- Botón de agregar usuario al principio -->
+    <a href="/usuarios/nuevo" class="button-add">Agregar Usuario</a>
+
+    <% usuarios.forEach((usuario) => { %>
+    <div class="card">
+        <!-- Mostrar la imagen, si usuario.imagen contiene la ruta completa o solo el nombre del archivo -->
+        <img src="<%= usuario.imagen ? (usuario.imagen.startsWith('/uploads/') ? usuario.imagen : '/uploads/' + usuario.imagen) : '/uploads/default.png' %>" alt="Imagen de <%= usuario.nombre %>">
+
+        
+        <div class="info">
+            <h2><%= usuario.nombre %></h2>
+        </div>
+        <div class="actions">
+            <a href="/usuarios/editar/<%= usuario.id %>">Editar</a>
+            <form action="/usuarios/eliminar/<%= usuario.id %>" method="post" style="display:inline;">
+                <button type="submit" class="delete-btn">Eliminar</button>
+            </form>
+        </div>
+    </div>
+    <% }); %>
+</div>
+
+<!-- Footer al fondo de la página -->
+<footer>
+    Gestión de Usuarios &copy; 2024. Todos los derechos reservados.
+</footer>
+
+</body>
+</html>

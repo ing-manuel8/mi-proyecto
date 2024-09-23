@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agregar Usuario</title>
+  <link rel="stylesheet" href="/nuevo_usuario.css">
+</head>
+<body>
+  
+  <!-- Formulario con previsualización de imagen -->
+  <form action="/usuarios" method="post" enctype="multipart/form-data">
+    <h1>Agregar Usuario</h1>
+
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre" required>
+
+    <label for="password">Contraseña:</label>
+    <input type="password" id="password" name="password" required>
+
+    <label for="imagen">Imagen:</label>
+    <!-- Imagen circular que se previsualizará -->
+    <div class="image-preview-container">
+        <!-- Imagen que será previsualizada -->
+        <img id="imagePreview" class="image-preview" src="/uploads/default.webp" alt="Previsualización de imagen">
+        <!-- Texto de previsualización cuando no hay imagen cargada -->
+        <div class="placeholder-text">Previsualización de imagen</div>
+        <!-- Input para seleccionar el archivo (oculto pero funcional) -->
+        <input type="file" id="imagen" name="imagen" onchange="previewImage(event)" class="input-file">
+    </div>
+    
+    <button type="submit">Guardar</button>
+  </form>
+
+  <script>
+    function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            const output = document.getElementById('imagePreview');
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
+
+</body>
+</html>

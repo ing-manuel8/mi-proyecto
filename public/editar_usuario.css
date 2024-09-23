@@ -1,0 +1,117 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos generales del body */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #1d1f21;
+    color: #e0e0e0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Contenedor principal del formulario */
+form {
+    background-color: #292b2f;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;  /* Centrar todos los elementos */
+    gap: 20px;  /* Espacio entre los elementos */
+    text-align: center; /* Centramos el texto */
+}
+
+/* Estilo del título (h1) */
+h1 {
+    color: #e91e63;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+
+/* Estilos para las etiquetas */
+label {
+    font-size: 1rem;
+    margin-bottom: 5px;
+    color: #f0f0f0;
+    text-align: left;
+    width: 100%; /* Asegura que las etiquetas ocupen todo el ancho del formulario */
+}
+
+/* Estilos para los campos de entrada */
+input[type="text"], 
+input[type="password"], 
+input[type="file"] {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #555;
+    background-color: #3a3f44;
+    color: #fff;
+    font-size: 1rem;
+    width: 100%; /* Ocupa todo el ancho del formulario */
+    outline: none;
+    transition: border 0.3s ease;
+    margin-bottom: 15px;
+}
+
+input[type="text"]:focus, 
+input[type="password"]:focus, 
+input[type="file"]:focus {
+    border-color: #e91e63;
+}
+
+/* Imagen actual del usuario */
+img.image-preview {
+    border-radius: 8px;
+    margin-bottom: 15px;
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    display: block;
+}
+
+/* Botón estilizado */
+button {
+    padding: 12px;
+    background: linear-gradient(135deg, #e91e63, #f06292);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #f06292, #e91e63);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    form {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    img.image-preview {
+        width: 100px;
+        height: 100px;
+    }
+}

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editar Usuario</title>
+  <link rel="stylesheet" href="/editar_usuario.css"> <!-- Enlazamos el archivo CSS -->
+</head>
+<body>
+  <form action="/usuarios/editar/<%= usuario.id %>" method="post" enctype="multipart/form-data">
+    <h1>Editar Usuario</h1>
+
+    
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre" value="<%= usuario.nombre %>" required>
+
+    <label for="password">Contraseña:</label>
+    <input type="password" id="password" name="password" value="<%= usuario.password %>" required>
+
+    <label for="imagen">Imagen Actual:</label>
+    <% if (usuario.imagen) { %>
+      <img id="imagePreview" src="<%= usuario.imagen %>" alt="Imagen actual" class="image-preview">
+    <% } else { %>
+      <p>Sin imagen</p>
+    <% } %>
+
+    <input type="hidden" name="imagen_actual" value="<%= usuario.imagen %>">
+
+    <label for="nuevaImagen">Nueva Imagen:</label>
+    <input type="file" id="nuevaImagen" name="imagen" onchange="previewImage(event)">
+
+    <button type="submit">Actualizar</button>
+  </form>
+
+  <!-- Script para previsualización de la nueva imagen -->
+  <script>
+    function previewImage(event) {
+      const reader = new FileReader();
+      reader.onload = function() {
+        const output = document.getElementById('imagePreview');
+        output.src = reader.result;
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  </script>
+</body>
+</html>

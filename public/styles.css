@@ -1,0 +1,167 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #1d1f21;
+    color: #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Contenedor para el contenido principal */
+.container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    max-width: 900px;
+    background-color: #292b2f;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+}
+
+/* Tarjetas de usuario */
+.card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #373a40;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    max-height: 120px;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Imagen del usuario */
+.card img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 20px;
+    border: 2px solid #e91e63;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.card img:hover {
+    transform: scale(1.05);
+}
+
+/* Contenedor de la información */
+.card .info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-right: 1rem; /* Aumenta el valor a 20px */
+}
+
+
+
+.card .info h2 {
+    font-size: 1.2rem;
+    color: #ffffff;
+    margin-bottom: 5px;
+    text-transform: capitalize;
+    margin-left: 1rem;
+}
+
+/* Botones de acción */
+.card .actions {
+    display: flex;
+    gap: 10px;
+}
+
+.card .actions a, .card .actions button {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    border-radius: 5px;
+    background-color: #e91e63;
+    color: white;
+    border: none;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+}
+
+.card .actions a:hover, .card .actions button:hover {
+    background-color: #f06292;
+}
+
+/* Botón eliminar */
+.delete-btn {
+    background-color: #ff5252;
+}
+
+.delete-btn:hover {
+    background-color: #ff1744;
+}
+
+/* Botón de agregar usuario */
+.button-add {
+    display: block;
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    text-align: center;
+    margin: 20px auto;
+    background: linear-gradient(135deg, #e91e63, #f06292);
+    color: #fff;
+    border-radius: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.button-add:hover {
+    background: linear-gradient(135deg, #f06292, #e91e63);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    transform: translateY(-3px);
+}
+
+/* Footer funcional */
+footer {
+    background-color: #1d1f21;
+    color: #999;
+    text-align: center;
+    padding: 15px 0;
+    margin-top: auto; /* Hace que el footer se quede pegado al fondo si hay poco contenido */
+    font-size: 0.9rem;
+    border-top: 1px solid #373a40;
+}
+
+/* Estilo responsivo */
+@media (max-width: 768px) {
+    .card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        max-height: none;
+    }
+
+    .card img {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .card .actions {
+        justify-content: center;
+    }
+}
+

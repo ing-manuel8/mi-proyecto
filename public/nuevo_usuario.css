@@ -1,0 +1,138 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos generales del body */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #1d1f21;
+    color: #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: center;  /* Centramos el contenido verticalmente */
+    align-items: center;      /* Centramos el contenido horizontalmente */
+}
+
+/* Contenedor principal del formulario */
+form {
+    background-color: #292b2f;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;  /* Espacio entre los elementos dentro del formulario */
+}
+
+/* Estilo del título (h1) */
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #e91e63;
+}
+
+/* Estilos para las etiquetas */
+label {
+    font-size: 1rem;
+    margin-bottom: 5px;
+    color: #f0f0f0;
+    text-align: left;
+}
+
+/* Estilos para los campos de entrada */
+input[type="text"],
+input[type="password"],
+input[type="file"] {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #555;
+    background-color: #3a3f44;
+    color: #fff;
+    font-size: 1rem;
+    outline: none;
+    transition: border 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="file"]:focus {
+    border-color: #e91e63;
+}
+
+/* Botón estilizado */
+button {
+    padding: 12px;
+    background: linear-gradient(135deg, #e91e63, #f06292);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #f06292, #e91e63);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+
+
+/* Contenedor de la previsualización */
+.image-preview-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 15px auto;
+    border-radius: 50%;
+    border: 2px solid #e91e63;
+    background-color: #3a3f44;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer; /* Cambiamos el cursor a mano para indicar que es clicable */
+}
+
+/* Imagen circular de previsualización */
+.image-preview {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Texto centrado cuando no haya imagen */
+.placeholder-text {
+    position: absolute;
+    color: #fff;
+    font-size: 1rem;
+    text-align: center;
+    white-space: nowrap;
+    pointer-events: none; /* Evita interacción con el texto */
+}
+
+/* Ocultar el texto cuando haya imagen */
+.image-preview[src] + .placeholder-text {
+    display: none;
+}
+
+/* Input de archivo oculto pero funcional */
+.input-file {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
