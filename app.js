@@ -205,6 +205,12 @@ app.post('/usuarios/eliminar/:id', isAuthenticated, async (req, res) => {
   }
 });
 
+// Redirigir la raíz (/) a la página de inicio de sesión
+app.get('/', (req, res) => {
+  res.redirect('/login');
+});
+
+
 // Iniciar servidor en el puerto 3000
 app.listen(3000, () => {
   console.log('Servidor en funcionamiento en http://localhost:3000');
