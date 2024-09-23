@@ -4,17 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Iniciar Sesión</title>
+  <link rel="stylesheet" href="/public/login.css"> <!-- Enlazar el archivo CSS -->
 </head>
 <body>
-  <h1>Iniciar Sesión</h1>
-  <form action="/login" method="POST">
-    <label for="username">Nombre de usuario:</label>
-    <input type="text" id="username" name="username" required>
+  <div class="login-container">
+    <h1>Iniciar Sesión</h1>
+    <form action="/login" method="POST" class="form">
+      <label for="username">Nombre de usuario:</label>
+      <input type="text" id="username" name="username" required>
 
-    <label for="password">Contraseña:</label>
-    <input type="password" id="password" name="password" required>
+      <label for="password">Contraseña:</label>
+      <input type="password" id="password" name="password" required>
 
-    <button type="submit">Iniciar Sesión</button>
-  </form>
+      <button type="submit">Iniciar Sesión</button>
+    </form>
+
+    <!-- Botón para ir a la página de registro -->
+    <div class="register-link">
+      <p>¿No tienes una cuenta? <a href="/register">Regístrate aquí</a></p>
+    </div>
+  </div>
 </body>
 </html>
