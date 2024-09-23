@@ -223,7 +223,7 @@ app.post('/usuarios/eliminar/:id', isAuthenticated, async (req, res) => {
 
 
 
-const bcrypt = require('bcrypt'); // Importar bcrypt
+const bcrypt = require('bcryptjs'); // Cambia 'bcrypt' por 'bcryptjs'
 const saltRounds = 10; // Número de rondas de "salt" para bcrypt
 
 // Ruta para manejar el registro de nuevos administradores
