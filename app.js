@@ -10,6 +10,7 @@ const Admin = require('./models/admin'); // Importar el modelo de admin
 const MongoStore = require('connect-mongo');
 
 
+
 const app = express();
 
 // Conectar a MongoDB
@@ -28,17 +29,19 @@ app.use(express.urlencoded({ extended: true }));
 // Middleware para servir archivos estáticos (CSS, imágenes, etc.)
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 // Configuración del middleware de sesión con MongoDB
 app.use(session({
-  secret: process.env.SESSION_SECRET, // Obtener la clave secreta desde la variable de entorno
+  secret: process.env.SESSION_SECRET || 'mi-secreto-super-seguro', // Usar una clave secreta fuerte o variable de entorno
   resave: false,
   saveUninitialized: false,
   store: MongoStore.create({
     mongoUrl: process.env.MONGO_URI, // Utiliza la misma URI de MongoDB que ya estás usando
-    collectionName: 'sessions' // El nombre de la colección donde se almacenarán las sesiones
+    collectionName: 'sessions'
   }),
   cookie: { secure: false } // Cambia a true si usas HTTPS
 }));
+
 // Configurar Multer para almacenar imágenes temporalmente en memoria
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
