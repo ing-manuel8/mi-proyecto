@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const sharp = require('sharp');
 const path = require('path');
+require('dotenv').config();
 const mongoose = require('mongoose');
 const Usuario = require('./models/usuario'); // Importar el modelo de usuario
 
